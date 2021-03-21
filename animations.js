@@ -1,6 +1,7 @@
 // We store the DOM nodes to be used in variables 
 const elementsToAnimateText = document.querySelectorAll('.animated-text')
-const barsToAnimate = document.querySelector('.skills')
+const barsContainers = document.querySelectorAll('.skills');
+const barsToAnimate = [...document.querySelectorAll('.skill-percent')]
 
 // We create the function used to animate the titles and bars
 
@@ -41,23 +42,36 @@ window.addEventListener('load',()=>{
 
 for (element of elementsToAnimateText){
 	element.addEventListener('click',(e)=>{
+		e.preventDefault()
 		if (e.target.textContent.length >= 7){
 			animationText(e.target)
 		}
 	})
 }
 
-barsToAnimate.addEventListener('click', (e)=>{
-	if (e.target.tagName==='DIV') {
-		if (e.target.firstElementChild.textContent.length >= 3){
-			animationSkillBar(e.target.firstElementChild)
-			animationText(e.target.firstElementChild)
+for (element of barsContainers){
+	element.addEventListener('click', (e)=>{
+		e.preventDefault()
+		if (e.target.classList[0]==="skill") {
+			if (e.target.firstElementChild.textContent.length >= 3){
+				animationSkillBar(e.target.firstElementChild)
+				animationText(e.target.firstElementChild)
+			}
 		}
+		else if(e.target.classList[0]==="skill-percent"){
+			if (e.target.textContent.length >= 3){
+				animationSkillBar(e.target)
+				animationText(e.target)
+			}
 	}
-	else if(e.target.tagName==='P'){
-		if (e.target.firstElementChild.textContent.length >= 3){
-			animationSkillBar(e.target)
-			animationText(e.target)
+})
+}
+
+window.addEventListener('scroll', (e)=>{
+	if (e.view.scrollY > 698 && e.view.scrollY < 710) {
+		if (barsToAnimate[6].textContent.endsWith('%')) {
+			barsToAnimate.forEach(animationSkillBar);
+			barsToAnimate.forEach(animationText)
 		}
-	}
+	}	
 })
